@@ -1,1 +1,284 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>New Tab</title><link rel="icon" type="image/svg+xml" class="favicon" href="icon/favicon.svg"/><style media="screen">html,body {background-color: rgb(0, 0, 0);}@media (prefers-color-scheme: dark) {html,body {background-color: rgb(0, 0, 0);}}@media (prefers-color-scheme: light) {html,body {background-color: rgb(255, 255, 255);}}</style><script src="initialBackground.js" async></script><script defer="defer" src="index.15c643ec74aecf7f4270.js"></script><link href="index.45fe1f5e74963642743c.css" rel="stylesheet"></head><body></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClawNav - 大哥的仪表盘</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gray: { 900: '#111827', 800: '#1f2937', 700: '#374151' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #3b82f6;
+        }
+        .icon-img {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen selection:bg-blue-500 selection:text-white">
+
+    <!-- Top Bar -->
+    <div class="fixed top-0 w-full glass z-50 px-6 py-3 flex justify-between items-center border-b border-gray-800">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-egg text-yellow-400 text-xl"></i>
+            <span class="font-bold text-lg tracking-wide">ClawNav</span>
+        </div>
+        <div class="text-sm text-gray-400" id="clock">00:00:00</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 pt-24 pb-12 max-w-7xl">
+        
+        <!-- Search Section -->
+        <div class="max-w-2xl mx-auto mb-12 text-center">
+            <h1 class="text-4xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                大哥，晚上好 👋
+            </h1>
+            <div class="relative group mt-8">
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+                    <input type="text" 
+                           id="searchInput"
+                           placeholder="搜你想搜，或者输入网址..." 
+                           class="w-full bg-gray-800 text-white pl-12 pr-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-lg"
+                           onkeydown="handleSearch(event)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookmarks Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Category: Cloud & Dev -->
+            <div class="bg-gray-800/50 p-5 rounded-xl border border-gray-700/50">
+                <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i class="fas fa-cloud text-blue-400"></i> 云服务 & 开发
+                </h3>
+                <div class="grid grid-cols-1 gap-2">
+                    <a href="https://ncmzzdrxakhl.ap-northeast-1.clawcloudrun.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABtUlEQVR4nKxSPY9BURA993kRgkSh9ysk/oZOolToFCrdSqhsyAoFvVKl1SjEP1AqJEIjCkJsLHdnZu99e9ndbieZ5N0355z59AC8kr+T38jvjusnd2M3w3lV5gebVmSe5+F24zgUHk2HQiForXG/37WNK6P2DH5+ByLPb4/BZELKZDIoFArqF6CAc7mcymazcDkiQGULKZ/Pq+FwiE6nI1FuxwAFTP91sVgUrOGIgGbjB/Wu9/s9yuUyms0m9+oK4Hg8qsvlIljD0b7bbyKRULPZDJPJBN1uF4fDAY1GQyphMR6iyRzMyTcNyZ/r9Yp0Oo1er4dUKoV6vY7z+Yx2uy0Y3s5X4m+O706Js8TjcclYq9UQiUTQarVwOp0wGAxEgGOuiYBVtd8sxMBqtYpwOIx+v4/tdovVagXf9+FyfGdlMhgiK1sNi1QqFcRiMYxGI2w2GyyXS3tE2grYnepoNKqSyWRwZZyFRUqlkgyQVmjB2pJC5C+2gt1up+fzuVosFg8ibOPxWFMLajqd6vV6HVTwP6ccPKhcLhV/nLK5AzeuGB0nz5B7VK5yNvKjCo458Q/yt08AAAD//zYWgN0AAAAGSURBVAMA01HbSPU27OgAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">nezha</span>
+                    </a>
+                    <a href="https://betadash.lunes.host/servers/52850" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC00lEQVR4nHRTO0xUQRS9d2be27cfERUVE434CSBCotHGAmMjFRaaaJTCGKOloTYxcRONMbGxtbLAxEQLqWgsMBRYqESNQlAii3wW+a3A7tud92bmOm+Xj2C8eS+ZOTP3zJk75zKwQQQIfwV9ueh+77kV24Bt2rMaG0A1/rCDifgFXcJGUCFiwv0Ggem+f6CzKw1g/kuwPPJoV9KlLvS8NvBzAP4EmFgjMCEAXA9kUfWZMNeRaLgzSTbHJtEqASN64aZw+Rl61BYu+EGYLyoljZFBaPxCqPy5qSDmFE4jr3459T6dWE9dIYDM6HXwxFk9uxQgA2GcGq7izfYQhkiSJ+SAgOxr6Xnhqaqq2pv2eLL1YOsETN8A5RlykpyMQl4aAaayVqfdgwI0JlFjldASjMP05d7etLAka/UQVFxoQv8nQvKYhX0QxUHQzl7UfGekloreSauFkClkUunDZzJpYTXoSgWRoipxcncBRhhLgEqdsKemyiod/QvR2WqWZAo/zTUaLWp28KOfb9vEu1F+Op1maDIPhhBEvQ4UGeLMAAdtyIov0azcAWP+QXC8bTAvt5As+ejYl2EOa9fh4tv21tYcI62eQ4wxlLOa+x/t/edBoCKSUzi0WI9i+3Go3dsALYd2Y21NFRmjNCnd7TjVX3v6B64ijaariSf6MBhqgZlhaeL1zvLWc7jk2quwFHBGaAURYtkyZLTBfLFEY9lZZtmCMlqafNwQ07lXALkjodwP2S3XNIFgCOGajW1QNIhsFBnpx8Q0LBX831hZtEvDT2ogudgp2cErM6LtkNalkCFnK261b08VkpWJ67qsJMMPuAKsLWYyg3u86n0DcS9Rm8/ngXNedk7EU/YwUfmPcK01iMpzYlncG+rlddiUnZ5fPG97556F9mtjDESdGPGbCpH9iAuhLNPTf1p09UrRuL9/PC7lCG3eU1dXB+8KBXOpuTn4AwAA//8saHSoAAAABklEQVQDAI0wcCJ3ZdgKAAAAAElFTkSuQmCC" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">lunes</span>
+                    </a>
+                    <a href="https://dashboard.katabump.com/servers/edit?id=180200" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACjUlEQVR4nISTW0gUYRTHzzc7YzqLu+auFwomDEE3MzeUJMHKoosFXYSVoIwKwS5PhUES1OxT4ItEJEREjwkLBelDLUkWKLuaeGc11tZ21LXdbC/WuO7szNfs5MBUpudhLpz/+c055z8fARuEDWw69ZmFi+nuCy0mbZ7coB45wCHidyzJU2ANTUSsvuc/XmsFxAYAfOfKjTOLvpn3tH5hgGkofLCrs8CoJDCg9QCIxUBYKhtbe8f5F4+8ZVWDK0cSaNMWOjscPrU6HPE/QIqMn+5ubCkkw7eOFseEAnMsGU23wOjMDjzl0zMpkd1egtcAsAQrAzZXNe9kpLm7J6wGUaCthJTM1WVMvoLZ+Tg87DJJipK9t9YOWEkGSNKs/3xJdjzN5TeLZimGqveVYtcEBaHxXvB8Ds79nsDx7w68Dc25I2ebDhkSsf1+LoIt+TwxLeqR/YkPpRlocnRkGjxc5IMidtQrnSg2ysOgFG5pIfhs7EvguBQJCKMrmThnYJg4eIyGuF4QI1yQdE9id6C/vU91SAWkinFdbsX2BM/XZIoxOJn1k5rKyJJc0Szk6RiWtubQRDBhiM6DcFXWi+qiFQBefTtsoI3FeWRGodnYtrdouSjsDdQORvnkG56hhrkVqckUJq7XVe5BIzCk1igAtEo6UEr5qXy4aWx3tklCqzNv/iswnf1U9ZA3/Daq21RObcvkZ2O1svSxXduBukDLy+5F+db2sRwo8bvAkEwZSrts6macPZds33T9XIhI94xx9+Gv+MMFbLPpKgZBgCXhWtL76TbfFapHp51cnDL0eZfpcxWuDrditmw1aP66dQPbQCefKFHjFtbm1wRgzBLQI3dXw4pqgXwhkObLavwCAAD//2QC1oEAAAAGSURBVAMAHT8MFI1J3fAAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">katabump</span>
+                    </a>
+                    <a href="http://107.174.142.48:8317/management.html#/system" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAACjklEQVR4nByS3YscVRDFq+re27d7pntndmYnJhEfdgMR0WBEzIOIEaOCPgmCrz4o+O/5KoKIghAl0XwQdvMxZLMJu7NDdjK90z3dfavuzU3quc6hzqmffrD7M3vtAhhiQq9ACDkxQqFBWWmc63CsaUlQEwgC6Jk704rZ0DV7QfQELrM8O6iLHm2OjeMkYOKDTWCBWAG09Hh9hkPaQL7y/canjVhRxfW/5nduNWCLRnLGicA5h28wjDz2NaBxxEtRBrllGgz7//+zv3P5LDduuhfe2snbJoAGABXPCcEQkiolrcSWnZbe6NH91f50YYcTUNndW6eLRRqSQcuFg6HgluBYffnT9+zJCZo8P34yv/nrTdvvPd09qSvXK5KD6Wo86WdFwkyvB6iM3mLbdPPhvaO9fx9NLr29OFm3jquaD56UprB//3E8O1LBbjgpBEZUcrLWg/3dZ3u/37jw3bd1i+Wqo62JS3NP1JF5/5t3f/tlOjvCYHri+3oZknWHsPWmPnv+8Pa085ayojqpjfbdyiWbo6cPq8nOROdFxzWRVxd/+LGLVmkv3b4w+++2LF4IKZagESmz6+dlALz02TsaggavY0dLMWVITlqovMk//3qdb4LSYFLfy5s1w8Zw++qH1Rqc1wxpFzKK2+UrjS1ZVR32r34VlcOPrvTeu6zHk+1rny5LdmA42M5njaS6FJ2QTz0KkTCDovSTa4fX/4zkXPzi49Mq9NEyQBOU8lSx0lUkD0LcjizFLKFxg/Pbp3RjPMpgeK6t5takrdcKOy+6idnagCLoIXIXTZkDd4fz7IMrqHk5XwwstWS0MuDpBacqRHsfqwrkkSAQYPAA8e3OJSI1UoIqFoMIFRsIYDG8BAAA///CItSyAAAABklEQVQDAC2vbGXCjresAAAAAElFTkSuQmCC" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">CLI Proxy API</span>
+                    </a>
+                    <a href="https://nerdvm.racknerd.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADEElEQVR4nFSTW2wUVRiAv5k5O9t2d7K4bZe1yNo2JfUG+tCwARsNqZc3idgmNfAESBQSSdQHYzTRGE1rIHIJmJpFkj6YKIRIJaJWqqTGIm0pvEFKoJAuW9gFti3spTsXzk6ThTmTM8n5///7z387Ark+Gr69W2h8oCpKQSiUhAqOA7dyJYLy8FoswLpYNQru0uSuyeVyiUAg8I6y/e/0Lk3lQ8kgYTS5MxK0bYeXnqhhfYtBuErj0TV19Srnzo1TyOcSolAyN5dhn/ylCyZ38xZtS6vZ+GyI1rDfA2YyGf4dPs3lyUmCwSCh0JJOkS+a5YiZnF0gGpR5tIV5pdHwgMVikcE//+DMyH/ouk40+jiappHP5zVRKJa4ll3g9WaDL1+WClXxwKf+GuTYkZ9BUWhpWSGdFUgmp4nURxA+gZhM5+iQN369rsEDXrgwQd/BA8zNzdP99kbWtre7YcviMSSdjo+PUV9fj9Bsi00rwxUwOT3N/r3fMjp6lvVvbmDL1m3Ialf05RQ2dHbhyO//kRHEdCZHLKRXDD795GMss8Shw/00NjVV5PmSzf2iSV1w0TYeX8P46Bji9swsU3cKRKTCtm2+6umltrYOv/9hBy7evE/392PEwlUM7Ii7MsMw8MkaqGTzHBiacoWqqtLQsKwCp+aLtH0xxNNv/Uhttcbe7pUVp6lUym2rUMM6/ScvsVAq0dv5DBHDT2q2wOcnLtJ/8AxEDb7reZV32xs9RT7x63Esy0LRtw/MWaZlWDP30Jb4Uap9mBNJd7J27nyRPV2rPKBpmry/4z2GTg2yOr52Xsir3RGmrgrrclpaWLyx6QX6t6wmVKN74IHjv7Crt0eGf4PlsRjXpq4gcCy7mJyDbI62jhUktsZ5/snHPOD58xPs/qaX4dP/EFkapbX1Kbfgju7YYiE9/1N0WXDbvs866FrT6AFvzsywf98ejh09IqfOx3OrFtNx5FNV5MQqqL+5c3s9c+/Q8trA5nK7y2mWvR/+IUGir4/ZbJam5mZ8+mKbcZ+zU6M4ytGBk793PQAAAP//JzuOuQAAAAZJREFUAwAFWS1HKkMAvwAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">racknerd</span>
+                    </a>
+                    <a href="https://zeabur.com/projects" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB7UlEQVR4nKxSv2sUQRT+ZmbvbldynB6rF08QBBUsFGsLSRoVrFPYC5YW/gdipX+DtVgpVnYKqcTWXKFYKbhZD0l27+Ltr3l+M7lwRyCNyezOzJuZ97753jcvwDFbcGCsQYKj3T7yW5dDm40bFE6CwQa+tDsYPKYZCsQCen5saQUo9I5s9u+ktdm1XGsRKdM0eUWHygO0cT7soP+840MWtBxnB9WSLgKjYbWBIaC1Dd3iN8C48lcx2PnmJQd2mc/s4u0KGYOkdkveXoggj+PxIoWcQV0IJ+WAeO5IWM10aJtGSzTj0arbVsrzm43HnuBCxPvYPFPD+HWEyA5xs16j/ax/+17WSp82anKNoFu84l2o5O3XJPnsLjv6Fbq4ChM/gtY30MgH7IavgR/fD7sdALQHgwtPSC+kVDKt9fB6VD94eK76tr5Sv7/Yqv9AaZ3V0imUblOQ2dl08kKNUHqAOI67gWln2qtssdMobJwu8PLSX8JpaJe3mqujFSalIJlkvSufkM2rzyk63BOxp6zThn/F7KYEKnxVWNnXTsSQJkswv5z7F99/BSrarA5ki3ErrpAsJVeQaNqgX3pEqq99YXBfGRLJfi5XIttesv3r1nIN9Xowo2203OL3kmidBopVZ++OMF0W8b9vAO2fwAAAP//AzZu2gAAAAZJREFUAwD1gdTcjRxiqAAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">zeabur</span>
+                    </a>
+                    <a href="https://railway.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACU0lEQVR4nIRTPWjaQRR/p40YUkimREmri4OL4CCIBKVTZlFwyuBiobaTgxbEvSA4tXQodWkWhYI4Saem0s3RRVEUE1T8QJD6gej/+nsXE0wKzcGPu3sfv/fu3ns6+nedAZfADbDe4mYrO3tsLHbOz4EPQAQwGI1GOj4+lqwYDAZiuVzycQV8Ad4Df3YJ2Pk7cG42mykWi0m/3y9NJpPS9/t9WSgURCaTEb1ej0U/gCCT3BF8BN663W7K5/PSYrGIR5lyJqLValEoFKJKpcKyT8A7NvQy49HRkbFYLGp2u13M53MpsPR6PR0cHNDh4aG6M1Gz2SSfz6frdrv8pnMWfgMuAoGAdLlchLcqW03TaLFY0Gq1IokVjUYFyFU26XRaxONxPl8ywTUcXiQSCWm1WsV6vZZwFicnJypdJqtWq8oplUqRzWaTtVqNnE4nf+z1MxCYkCIZDAYaj8ccTUUHEZVKJUWwv79PDoeDkskk5XI5Oj095QpRp9MxMwFtNhsajUa0t7enCNiJ741G4/7Oz5lOp4r89jtuFxP0ZrPZy8lkQvhIDWSs1cSOFZwkk4fDYfWJiEzD4ZD1PSa4gsEFai08Ho9AJC6ZTjWJeFBNAWfRbrclqsV2LLu6LyNqbyyXy4Rd1fxBE2DdZYTo0uv1CuyqjBypDHzltILBoESzMIG2bR4F+KodOg026gnsw776bZBfgAvNYUMnCv44ngNURnAfsEM2mxWRSERXr9fFtpVf82w8NUxKgWGS3GD0n2HaXTyyb4BX3CNbWR/4CXwGfu8a/wUAAP//zP+c6gAAAAZJREFUAwAScSfv8zG7kQAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">railway</span>
+                    </a>
+                    <a href="https://app.folo.is/timeline/articles/all/pending" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <div class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs text-gray-400"><i class="fas fa-globe"></i></div>
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">folo</span>
+                    </a>
+                    <a href="https://app.koyeb.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <div class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs text-gray-400"><i class="fas fa-globe"></i></div>
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">koyeb</span>
+                    </a>
+                    <a href="https://openclaw.dodobid.qzz.io/overview" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACnElEQVR4nHRTS2sUQRDuntfOzgZ1VxSDhgSCiBsRWURPgSRzMRcPBgXxpiDowUNAEQUJuUnES0CIFy9eFH+Bh5hjghgMxByETcTgIc+Jm92Z6emXXyca1o0W1FR3dX1fVU11W6RJdFeXrwcHy+Q/wsKwvISYZh/9i6Cv7xAJgrOZ1h11zo9yITqFUgT6vT0IVjzP+0Hq9c90amrrnwRGNsLwtm/bz3OUFmIhCAeBpTWpCdFYiePhC7OzL5vjLfN5S4htbBSGz0q53MQaY8FiHPPNLBNGl7Behe8YzqYrlbFmDB0BCVSthWF/4DiTPEnEpY0ti5YOWm9YpjlqvF6rU1k6qF5tNxR3HafGWH///PyUwdofwHJ3YKCbUvrEJeRUopRqy7hzLuO6w3Mp/gctYH0mTa3jriOpUlQTUhrp7v54eXk5osg8DOfocr3u5x3Hyrsu9dCzkJJEUPMTc8TsFdnknBR9Xx8JArXNWLqeJA8dLDoLWhfW41i1t7URCcCmlBpA8KqdvSFSWmuJahogcZKEUiEKW2l6wlmt1cZiKf3D+fzQAdctJgBDLLU7vh0lcBhCGLWdpgRJo0yId1GSjO+N8Vtv7wuf0jvrjHFQOKYFjoywGqOkqMRYgfG6EWPjQ9XqPYOzzTh6MI2TxeJSZtu3kMVmCBaoQuy2YqqgUKVhUS0jSt08HUVRH3DWNUKkYeqZm/uSCvHYo9RGrCV2SRSqUMiOnbYxeDtT6sGVxcWvBmPGv9cCRkOx0TOVyn30PMqktHDLPNNKQ0rgVJZK+ehqtTr+J3b/W/h9MFkuXyy47vRPzl+jbzuHu7TC+fkb1eqnZrARp+VlaXO7BhYWZt6XyxPI+FQyplPbrhmwOUOMasHsl9YsTbGtPvILAAD//xbFsCsAAAAGSURBVAMAmPW90zMoQIUAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">OpenClaw Control</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Category: Media & Social -->
+            <div class="bg-gray-800/50 p-5 rounded-xl border border-gray-700/50">
+                <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i class="fas fa-play text-red-400"></i> 媒体 & 摸鱼
+                </h3>
+                <div class="grid grid-cols-1 gap-2">
+                    <a href="https://www.youtube.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABnElEQVR4nKxTu0pDQRA9u9mrBiGgsZKoiZ0iiK9CBP/AD7DzD6z8Cq0FGwtbP0IkiKBYCGIbNKkENYgSNckdz2Q35l4rX8vdO7uzM7NnZs46cAhgKCy8TIyFsL+QtF5dEPNQjDobr/jxCL66mBkD+pYYdBjIDFJmqXY8zwTTNn8tgmwA7RfKB+D93OCqSgTza1Ts02DEG1svUriSAOPu4p7rDQ1wzFtXGblJLxusOZsehCWI+NPJ+ClUZCL6lOkgk1xQIbQUDUDZdihNOERRhPgpgrWajuvZqFQfU+TG5v3Nvh6wKp8NNtcNjvaA5UUiqFP3ZvSwl5/6SF5vHOjlx4MQBy3WbWUWKB8Ah7tAsYBOWsYkW511+OPQAK8ayW9F+PkbHNM8uQS2toHTswC0X+uXbEmDXZirEteoL34nN0rCL5EatTuDZp2p5wQdv243JJAXNa1uhYUvpNuYEVRuPECbS7TRhDYitLFV0RSIUaZo+YVILjAeSD8RVShDhUQyO4HK0+PMj1S2Q9x+g8rmkW0lla9v/+sx/f45fwAAAP//ZPH6ZQAAAAZJREFUAwDyMIxgZOLmzQAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">YouTube</span>
+                    </a>
+                    <a href="https://www.gying.net/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC9ElEQVR4nHRTS2hdVRRd+3zufe818SXGT2ysgsQPaAWpiH9SiaEgSB046kQcaAZVHImIgyJFMq6T6kCq+MGRTgpFwYYYRPHbmR3UFjFB4icmuXnv3nPu2dt9bz8USg9c2Jy7195nr72WQ3uEAJImmjkcHzWOnhfhvajDzdRcuuwPkDnJtby3+IZfvhxDuHB2vrDau+u2GxYgPO+c9xyHqJlFtKwhQz7vIqUYBebor7+tvbb67s5Bg9MCYvYcQqffqT/zmZurB9tclMJJM7sZKPeEKooMSnCewYyOjZg4jF9uBL//x0MondbgflYuuCyfC9tFNQjkH5i29uk9Drt3GezICEUQ+uEM2w+Xo6yuF1WvP/JkH9UC0HmZZg4PHjTWfE2JsV0l8+Ksp+ce91TVkOM/RVrbFEyOGXnkDodPvw04tlTLeM8wGwtO/Jgj0LyzmVsvinp2t2vBK/+KHDw2pLNrEGugXAj1e0Eyzb6mS6TcwLquo1TNOyIzk+og0GDfva6hRd5fKuncmsh1o9SS3MmNDCuhzYFIJwO8JcOKIWNmnHCYYuWylxPdNG6a9eDsX21n2jVBePPZHJN9oo0B5LszCe98FbG+DcqszsgyZS6uUXFgkQshwVng7y3BB0tR547YqoCn7nP0yj6PoMsEnV+irjhbsdZhGET+/I9b8C0ToDJC9MPxn2scORHl1Y+GOjtk+kaL0Q5pKweyfsWo4haty0g1w8unk8KFDjzs5dbrif4pIElInBW6c8qK07GaVw2CsFOMMC86gRxNKRwY7TmcOMXy0O0JT9xt6ZODPVk+HWlrqCq91ui9pTpBPv4mCrf6C3WDbSfZ+1Z5JOvmL5WbRaU//f77Lc3e4zA9aWA1Q0nDqd8TPv++ll/OpTg2MZJXw+rtk6+rkC5JOVcpd9xcKArWrpx5mB0davdYKj+DALYWZnx8xISy/mKjcs80Ur7STFAzWe/rUCI1jmjMZM6biTlGlivMdHU7k9q5zbBXt/P/AAAA//8qLEtFAAAABklEQVQDAHHmllpkK5XzAAAAAElFTkSuQmCC" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">观影 GYING</span>
+                    </a>
+                    <a href="https://xsijishe.com/k_misign-sign.html" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB80lEQVR4nKRSsWqiQRCe3f/3REXO4jgLrcQrFa4SDo5rbSyOgOgrxCcQFAtT+AK2PoFlEBQCgUhiBBXSWUlAUkkkYtQY3cmM7oY/JqTJwsfuzux++823Y8MXh30YQETx2QUhBL7ZO9YWwU1QH+R23HqWhJU5Z+sAb46CweAJ4Wmz2cj9Y8KoYqDb7cbxeOyaTCbHFD7ju0wgWDaNH8Vi8Vcul4PFYgGWZYEh4JlJeJRKJahUKt9pL/kSE6Cua9NoNNRqtdoul0tpSrBtG2azGfj9fszn85bX62W1W51Ho4DZHsLhsEin03I+n3NSKqXA4/FAp9OBQqHABEgxQ86P7hVoLOmgqNVqQpPuZDNBt9tlBYfGCmOi0rW2R6PRTTKZjEWjUUVGWqxASgntdhum0+mrH84htcscvff5fPexWEwMBgPMZDJIZiH9CjBe/xLftMG+kRzNYZFhGAqFIJVKqUgkwnF7vV4DGYsOBabsPYH+RiS5GAgEdkgkEja/1mq1wOVyYTwe3x3lkrRy8U4B1fmtXC7LXq8nm83mJYWuCL+r1eo/Mpc7FYbDIU+PRsFhu/4l/NTra1JwR+R/SM1FNpuFfr8P9Xr9lBotS/n5RwRcDr/ENXHD8DpA+K/Tt4RzwrM5f0ggHTFlZOpfkrrcrfPCCwAAAP//lIeSxQAAAAZJREFUAwA8KOLlhum8tgAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">司机社</span>
+                    </a>
+                    <a href="https://www.qq.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADOElEQVR4nERTXWwUVRT+zp17d3dmu263UILtttYHpCCJQXkgQhoaTF8MURPxwQRjVDSGRB/8jQlJ4xOQ+Jvok0RjhRpjRNSowaYxYGwIPPAALVB+uiyUn6W7JWXbnZ2593Dv8HczJ3fm5p7v+853zgjYxQxCsph4HH18qus7M/NZiaNKNBOH0fOlkanlp3/a89iZ/f24u+7k0L3v45tbkD6wE3L5VvR8pRhrHDDGF6r8zNQBitMCOahYKrn7Urny3vX1r84lAAn7iZVZqJnfkO/sR2GfiWS3kNCGhBCO42j9Gv88e07vv1EiXch6mfno3yuNeFPl0c11QWTFqPoOZLkf/qehSXULRTG75LGJeR6bqPOa7BLa0blW7u3ZKB6+iXA+kBse9NUuENmaJ1esRXT1EIIBmO5hSdCsjcArn5dpaKSWlLdloIDdb3cbJSAqccO8NDVqJrmOVpb9AnHzTUgjkXvOWmgfAo0cm8PQ3zVGIJMY+rPGo8fmyFhX2kVGfFFch0ClZB3mNYsZ9SFuYfgrhDGOz+OT0yE5dZ5AEu79lDuz8Ata8yOZvHwheIhnTbhBoKk7wb7NK1DimBUxfiFMvHVdSMLKOl4K3QbpOdPAm1qKyBvR4TiSW2xCeMSYrjZ5+OANgi9g7LkLZAR+PDhLl2sRK+EEAcsyrSimshDwmpfAF8HheXYUE+UGCi0eOzmOzYXtCLflPJ64ECazxhY1ZRu91M+XhQ6e/gftLxL5q6xH4PUrcxh+t0jcYI5rMeKqZg5j2vNOF63r9aEtHnlWhKVbSqlROcnffNuzBFuVJaOmNumUEO0PKN727CJSSlhIpmZkeHFWIJ32SF+sGvgKelGg+9Tir5NR1r+P7RRPrn4/bEtDJn2w7XCO3Z/02+O+77Ch1z+J8MTjafzx4S5S9IHHg4Oi9MaWQ63/NVdJTveKjjzrnM/aIhhn90LE/P9Jpo9+iGn7kId5JXm6+iu1+tvor2V8m4IHBdOgbcdTH6Ot6y30dgRozwINa9rZCnDmir0U2wgWIMSXMHu328To3t/ITrBrVzLcA6vt/rItZKPdi3a355kylBxF1Pie8MuROxW5XL4FAAD//8ck6EoAAAAGSURBVAMAh49353KVIbsAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">腾讯首页</span>
+                    </a>
+                    <a href="https://lol.qq.com/tft/#/index" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADJ0lEQVR4nBSTT4scRRjGf91d3dU9PbM9s7O7M8mKUYkRN1HUi6g5qEHIRUQUBBFyEr+BHiSePHn2C3gVvAjm4iK4RhZM1MiCirpmN7sh2ezOzvT86e7pP9V591BFFRTv+/ye9yn1yftru2eWoig3Nkr5jCYT0izFc0/uFQ4W1Dl+GOBpudUlhbFYaARs76WxWm61ul9+Ow6PZi1CvU8yS6ntGtvyaHiQWGco6aCcVErlVLlNXdf0WiOuXPKlh3LKwykcxo/w9hvw1rM14wdjmqHhqw2Pm/brpNEaJtuB47uguhCPqY++pqg6pXLDHtq7Dy++w7XdHS64X3Dlg+c4SGpurL/E0iuvMZrFzMbL4IaYUhQEIXq8ghc0UUmWCeIMBteZd89x+25BKn5kOkT1T2GEVYkN1IraLbBSQ10dUMeGyXSIGgyHwuRAZrCdACyDaxVgg29SGg3NqCypPSnki4IWmGQo25zjwyF2088xwVnQz2NmhTivCTzpVhQURwPm8ZRkbkS+jRU1pJA0k3teVoQNF9smpbK0aHwS6/gejjhsVEglozoZWdDU6Cii+1iX/moLO2jh9B4VM31cx6CqPJeKsTCm4LQpTUY2n4tfTWqnwdxu4UYhpZMz3Nuj2LxBUN1hcalDhSA4Jqc2IlF3oFoSNuG3LHToMdz+kf2ft3DvTxn9NWK8/hsL+9e43P6ONO2iVYkKtHAYCUJHVtZGmsvKUW2Fn/1Edn2LwS+ncRoLnI9iPv9oymZ6ke8H59D+ryhXC6sWaxdd6p2/5VwxngjGYJuPL2sGSSYPb3O2Z/HCM30uXHyKT692BKtLI2qjpL0obsODgtV8nVdfjmhKLjxT8t67T9Nvu5hKRmyVLD7eYXPXsPXfaVbaE+nuoEqjyWcS01tXWX3iJtvpKf7ZiDHOIpUY22wISivE9jX+7wUbtyroX8IMvyGJD8QD31FL/fOwssa/1Zv88YORPPxJ5a5h2VPUck8mNJcMuGKumCaGR9b/LHupoGmlJrU/+OxDVSbze7jy+6rkmDI5lC+7I1mAspDt5EAtkm353hIwU9PphOyPwvghAAAA///Bh3vKAAAABklEQVQDAIpJbrPi2y9hAAAAAElFTkSuQmCC" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">云顶之弈</span>
+                    </a>
+                    <a href="https://www.douyin.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACd0lEQVR4nJRTS2gTURQ9702mk6SaNhWq4ge7UUvdGOPG+AM3pRWtghC1iHahXSiCiAZcaosWCyoIFqlYpDULW6PShYq4EKrQjQs/RaxuSoqfhQ1JWlLnPe+dNylx4cIbzntM5p17zzv3joSJIOEiYYKQJ6gyBMGC8Hb/3XtCDyHMRPofEcIQoRX/F6OEpEXLJcJRwryfEOXMcBysHklje+seFDJPUbBIhKafOdtI0JKW3b5cTibLfItz2AHR1twsHre3i5OJFqFclw55nIDPSfLDSr8gQ0MIAcuCFEaM+JWDVgod/T3Y3LZX/K5drCvOL+ME1QvSiSw1vadKJd6piLSpmNKoX9uAsYcZDJzuEjV8NiCZE5YLlhBZEEk1roPdexnx7m5ERBjzDvVg8gfe7DuP6eEXOJK12XUBUlWWoVivUFrrbQmxNTOMG3VLsfFLHh2bdmJ26gnuTzk4vn4DBjGNBOrxCj/1nNdhY4gnUdO9V13pQobJvY/w+kAnPqoZhNhOrRByIigS5Tm+Y87zz0QA7BlJd+uiYn88hiUfvuH62RTO0EwppwpxEaAyVMD1WogqalTJVPdCgsjeU6mkawuzcKNBjK8ImRqxGKptGrhcnq7sGrHeGJgFft+LiuzDTA7jd+9pa3kNUi/T2NJ3E7seDOFYIAjR/wxvVdY77UKXybwXuPhnQoPnaCgoB2/f0cnDB41Enrdro+g7l0In3rFSZhvjTXwS/ihf4EuwJzyBJ5p2oGVNE9yJLEYmxzBAxlUEV+b72ISrnGARIY1/fUwCFTf+K/hjOmT5lTNgg4EoT5clpa1p0JhraVHJLxK+Em4RTrEHfwAAAP//rtl/OQAAAAZJREFUAwDpN9T+g2BJyQAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">抖音</span>
+                    </a>
+                    <a href="https://yyurl.cc/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC4klEQVR4nGxTSWtUWRT+zn1jlelK0laXYtLd0BE72I3dTgsFp4UrF4K/wI2JCgF3blxkIQi6UREhulf3DgtByo2gEBWcpRzQJGbQylB58Y33Hs+LvKDiedz3Du9+37nfPYPCN8bMqvBvNNhrfObuUVkN8X+GyY2+2SAxHpnmdaUy+l2FHVmGLmYB2RgV5O0kwYWVbfS4wC4FKH5MfOYj7T6O+4RlH0JgVpYEwqoKUJZvSyOIExyrlelMwaHCmYp4oOrh7PsWzLV3OnvdYnsuMIhldVcYe3vt7N+a4zgeaCHGQNWnc4vcXMH4PK9d5uH+TMjO+aca4xFUSXbmZjKwAZphhlYY4+TuitnU5SBmJKJ/Q9WjF4sJsSwcanPgX31rzKSQOxxgYV7DZEyWXNMlgyhlnLkXqFbIps1FSY4+mHPV0DA7vo3tExH4VcDKMoxmUyONDClLcWqYZ8OEKr7C82aKh1OJEnEsz46ca2/7E1Wt0dUMQB8/aTKaoU2uSrFiQ1MLETKBu3JaJM74vGAMKE64e3cv/apKeSyJKCoQhoy1VQt9G21MBhqvp0MESQZL9GqpZyzMDlHC/LX0ZeGqm+/RNMRjXRXw6uXEd0ZiVOS4gc2K/llhsedYeefQXKLxR7uF/1Y4rAlccmnk+TCmVf8mSrXhugSmvWuUmQoiHL4+h9mIeV+vT2ULNJNqftNKsbXbw1/tElCworu+axdli2X8GPEaycwDl1AaHk3N6buB9Wgyk7uLVmWw8heFPT0+rjwN9ZEtnbR/nRuNTWN9T40aS43UTLiv5GAoi4EgRfJkMrHHAsNSMvq/5vLqTmUuPQudW+MOTm2z+5aX6OJSIxVBREm/Z+OEb6Hz6//8BaR5z0si3Ly7UxytuHSh4NiLAyHOoEzZb0RDoy2uZx4OCG9nmuF3AcJ3MEKK6hMz8cWemt8Y5EElHPPdNBajWmzU62yv+hsduX/5JWYHJWE/YnL7AgAA//9+pGeMAAAABklEQVQDAPEqk9/xYs8GAAAAAElFTkSuQmCC" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">云盘资源</span>
+                    </a>
+                    <a href="https://m.mp4us.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC1ElEQVQ4jY1TX2hTdxT+zu/e3DZN0jY4jakVGcic1ofh8iBFxDIfRBgK5U6UgfgiLLCNPW0g6oXhg08b7GHoi38o+GdOsRbRqSUwqE4mVtSH1qpp0jYmrknqSHJ7b/L79uC/slbwezznO4dzznc+AwvAcRyVSiYVus4KNonYyaT6oqtLUqkUF+L/H/LuFOflzHkUQG783pcY1J07H7tmJNIUaGnXtWeJwPTpHb1yR0AA8maSuR2FnyP445dXDw3Kiq87Vq4y1seAdhMYmQHuj002Pq6lfzncu+EHAWbnjU0b1oGjp39e0pflikHy0Cj9ezN6NlNteJfy9LbdIZdfnuVXJ68d4d5PW8CX6yg4jgLA67t+676Q098WXKu+JkgdU65R8MWacCXQcGvmStPXWd+qX6207z3R830PRAg4SsFxQEDODI/vSBdrDHkFWvTl8nSApVp9aKSC5+f+aZIZT0sn/8XTfFHfLnjf8ZjTDDhUADRu9UXqntvt5tJoqxTUzewLXi8b6ni60dK7pD7wUUSVUkWF0ItJ8Nm4jD4ZjyMEEwBfqrA4JuI+MKzpHKpT4+LRUtVclBNrV30yWFRdpck0SmNlQTkvTflReG0+0NbJ1zIKStFq2AqMhWfLa2pPhxtaK2kSwGtx+c3fhUBmMg8z1MpgboTB4gSXLY3lYX3QACCmbdtKEgn/4sXzV27fHd728MkDBqnpt8VVJpWl1j4jzSEYhUeopx/q5a3K7F67+pz07HFt2zbkjYycCh48+Gv/qf4/PstXPM9a1GEwskhgmEClzHoxp8OiA/aWjX/9tC+5RaIfzry9AUCRjirJ3dQ8fi315+aJ3Bi8qVGICExDsCy+1Ni0Yf2tw/v3b5dwuPzOvycZ7B8Y2H1zaKg3k8l0gEQsHp9KrFt3ftfWrackGi2/qptvLPKtWUg2k2wlGWE2G5z7tQsbbQ5s2zbeJwYA/wE6jV2NVwfHPQAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">Mp4电影下载</span>
+                    </a>
+                    <a href="http://107.174.142.48:5678/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <div class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs text-gray-400"><i class="fas fa-video"></i></div>
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">Drama Generator</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Category: AI & Tools -->
+            <div class="bg-gray-800/50 p-5 rounded-xl border border-gray-700/50">
+                <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i class="fas fa-robot text-green-400"></i> AI & 黑科技
+                </h3>
+                <div class="grid grid-cols-1 gap-2">
+                    <a href="https://gemini.google.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACh0lEQVR4nIxSS08TURQ+9zGPtrQUFEFajAswoTERU5PSjYHEhZCYuID+AGOa+GLhjkiwwTVsjCb8A6QxcaMkbmAl1HdADaa4QEoqkAJtp512Zu5cZ1ofKAU9m3vul/N995xzPwqHhBIKNdtnXSKxcVANrgXyHzh2yXewp27YzqcBSK1adIAAgrBfLroDyR1XM3B6tKMtPlGyYP7PDngQBEuV5z2d18Hd5Ns81uWb84Wv2eRodFI4tAMeA4piYGQu9XRjT+vzVUe7c6nxHCy7TxdW6JELj4brX/XEOJ2LIeMPgZ9EO89eDXUbDl885Qj43wtn2Qe5E76KJ8kOEteymhlJjIgLFaYlBJbQrw74IIhqd/vNgt40lpICrjcozJZZkHwxTkDGdDIdy0TnoJjcHH1bxg8sslbpQHkKLZQ23AZNvmwyZ8cya+Hv9KC5VDpPVtUunik0Q1GTEAPKACGMRUCmDknOzCcG4HGKiBMxCXl1jygoThdsKAKk8ias51TI6gXQiA4cSdWv4RxZFzsXMMJeUwNEXReLaYBiNJkMSaqxc4N75TFZLLmwvsm4ukWAegETiQEXiGlyBcrmaP4bfrhyH5XtEWhl/mkgqGPGBiaefep70eguxFv1LX+utM40rd56up5gTV9Ti0JkcQRXlzjICcQRq/gARYDZ5+xsD+0PzCyQsjbgduzmJE8KjLo0cGc6j2lmYHEELVS2b4dF3mek3t45IzoZFK6ceZxIq8o95tkmqnuD5OjHu/NDx1/C5GsB9nhgn5F+OwpQODUoFz83JHdVL1sl/lPQd8ta2X9YuRIRwPNtcXXN0KdyQmYK+ofKEEE1a2lNgXh1J9ugj1uvsr3Y3/EdAAD//429n5gAAAAGSURBVAMApnISZcw7dI0AAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">Gemini</span>
+                    </a>
+                    <a href="https://chat.qwen.ai/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADZUlEQVR4nSTXWhcRRTHz5mZ+7HbvZvdzSbVtklpWhs2NTFNQwuxVgKSagxWiyuFKAGfLGgEQTAKspZSFKxQESn0oTWlD+4+pM2LSJNUKImg1WorKtQ2YthtjWm263707r135nh3a6hSOjAwA+d35pwz/7+A/y1CAKQDY5UPbhVwRAnN45p36PBh81O4z8IVMJkElk6j6nso2z0+uXru0kXHnJzwINLMrwPJ/qJVzTUzTWC4xIxNa4upF9CpkWzl1UwGJSLQK69F3t+U4GZnN3fJtqVTch50XXUhVNGvOJL/Ak7sCv7hnk+lcsFaAlGD9+252fLjOWEmNjv9u54MDCgPZPpomZWXFBI5CjQe4qbwtwR+y4VIPLqdaY1v+vx7YltHrrWra9X5A4f01TcWHGNp2ZUtbTo8vS+IQ8NBBO6XyVChX+udM0jDBG16hnYCpJjo3mp9/NuvqpUJTz22W4epSRuyWYndfTq7Oyaqz0p6oLgAMX9NFS/MVd/2EyjBOGwo2Q6d+MRWqY+i0LNDxw9H8+RVSaHhgxr6FCMzzOnxQROMIMP5q8o9lS5ka4l5Z/vY5UCQv5S7WmXxOIeOHp2X8hLOpcvguoClIsGNrISBvQEcej7AW9cLb0unCEVDWuyLL/Uz7LN0eJY8ddJqiPDT40VVKpAaHLEgsVUHdIFAArVv0WDPcAiW/yI1carCNE3B4DPmi8nn/t7Ja012rHvjWyNAI8tZGWKk6JE+g0fjjGYnK34fCC+/1YDrNgo2MV6mz0+UYWNCV03NKEoFtV3UJ2Roa0kxwwgCnTleht5dhup5wmSJHYZSfkBvv8Gy1zw1fbpC4TDgkYN5FrDCyDQ5L2q8Gagc9CrMijSiE1uv88tfV6ntYV31Dq2iDW28/gOZoyWqFAisOGdC6DZ5sLh803u1LiRPFed03dw9mgprfnl1IHddghkkuXmbzi7N2uqbs2VoaLK4e1vu16Lhaad4285MxRb+9cJCIPV6bOapvaKdHOkgAfx80Q0ODVtW7AGU7yb/lNnfTV1rkGePfdU48F/z4d3LTzpA2fLl4uPKjYOxZmqma6aUxzVHRhcp3hKq2q776PHvmr5PAvGMH1SrHu/xJwEmfcVmEOTYs0v73bz5Tn6xKpgBJ4/9UNP/HfOthP8DAAD//yVakXsAAAAGSURBVAMA5BZ3Y0MRvRAAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">Qwen</span>
+                    </a>
+                    <a href="https://notebooklm.google/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC5UlEQVR4nExTv0tbYRQ938tLY1QiBJSWilri74g4adEiWAvSuBQapUNBdChmUPoHGBAcHB2UDg5ObplshlYKOrQ6GOxiIqJIqkihFEGjRk1e3ue5jwh5cHnfj/vj3HPPZ6L4aa0VP729ve2trq5+z/WbQqHwnOe2YRhp2lpjY+O3Ul9Zq9KD/f39D16vd4b7oGmasCzLSe52u3F/f19wuVy/stlsNBgM/pydnTVotioJnqmqqpqjI+7u7uyysjLt8XikgL69vdX5fN6orKw0iCrH+4+tra0xSeIgODo6CpeXl8eurq4sqcy16/DwEEwKIkJHR4eqra3Vl5eXcm+ynSyTvGxvb0+qVCrlJ7QEq72w+WUyGdf8/LxOp9MIBALq4uICp6enemhoCFNTU8jlcgUiMa+vr7+3tLSE1MHBQYRVvsgFsxrj4+PK7/djeHgYNTU16OzsdHiIRCKae7WwsKAZDKKw2XqfwbvXNJtZ9fLyMnZ3d7XwsLOzg9XVVYRCISQSCcRiMbW3t6fj8TjIlXAkfAyYDH4q02D/an19XdXX16O3txdkGoODg9ja2sL09DQaGhowNjYmPjocDtsMNojgmSDIEw7INEgSzs/PwbawtLSE0dFR9Pf3Y2JiAisrK2hrawMLgTyBvDmtSYK/xY0zLlbTi4uLAhkVFRWIRqPo6enB2dkZbm5uNLkS3RiiESI4kT42aIoDUN3d3RgZGRE09NGYnJwEheNUkjGKLurq6oRAxXOL2thQ1ICPCX6TlAArWLyUOetHhTKxBGgpIH/6WpySm22scYzvjKampgwvIjIJjlOIyT++D1EoZayFI+pHJJvntNws9I8JPzsciBybm5t/ENInCWDf7mJ8QUw+IhFTPp/vCbf/aWES+sd5BkWoUtlOJpMDTDBDhz625Cl5qcJLlkjiFNFcV1dX6jHGLEK1BQk1v8nt5vHx8SvCfMtz0YhF5xNO6iufc1L8nUfEGFk/AAAA//+aPQmtAAAABklEQVQDAA2OqBNNw/IGAAAAAElFTkSuQmCC" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">NotebookLM</span>
+                    </a>
+                    <a href="https://wuli.art/generate" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADCElEQVR4nEyTy2tUSRTGv3Orbufe7p4QTE9oJ6jBCfQEzDgkk0wr4yAjIiI+EBR05VL/BHduXOpSQXDlQhCJmODGB77AiMEXxlZjQidq0CTmof1Id9++dTx1O6JV3FuvU+dUnfp9GkikfXhnmbAbBIBBjlQDA0cqR3NG/g5Lx372z8w0VMXyMfLRelW27GEydQIpfC8NZ9+blcLWP8OwDaOYzSB51GpkxYglkSIygbFBSdYljIGS1nrhyJWRw/w4hEw4UogDhPR7V4r2Hf6D0AToRBMZDki5ikrhAlXqJarVixTUq9YzSDtEUYeY4k4qXDYBrW5PoHtTF9Z3/4fykofqTAWxosL7yTwKsQoqyRAzUzlazI/Z0KThs+No6Ipszm5px8EjWzE2bmhXX4+kQ9PE1CQ29/Xh3Knr2HGoF3WpA/k3/LUjSYvP3/Do6YsUFCrQSu7w16bVyG44hB39vyLZ7NOatWujlH2Y/gC3bQr79x6PxrnzUzS2tYfX7/uf3g3d59nHL6ElZ5wfn8PswgSy/f9SqVTkkZERKpZKWC6XsW5NJx4MD6Ml5uHtly+SIE2vzl3C52evyVU+bI4xOjKPp7l7+Dg9A+3G4PtxpFpTKJfKyGQykJShpgjZX1LQg/cwce0uwjCwzwYV180n5pcK1PJbyj4wNmY2UMxz0JZehYErA8hu7sffvf1Ip9P4p7cH7Ys1vr4wSUuP3oo5Qcu7sqsd7DywDV5bB508c4Gp7JJbS6BlYTtuXR5HLvcJKqHhxhU/KUxT8f0ch/WAXO1CG/GgqYn8hIM/N3awn9yC2hh49uELevz6NkZvDKPqEcIkcbiKaNkUeP7mU2GuSXAWvHzhIDQh4s0eOrvXOUGQMJ/yH53Pc+84RIksWaIJoVMUElHNgp9nwY0GEcpClREnTg21aFpDQcuKUqqBPa3Qa1tREeyxuYGymMR7xFuXMG1iKgZXrqOEsIaEDHFDeg30V8RoqxWeDIdUCOeOgtMpdGaieY4E3JBKJCPCz6UR2JrxYBWVo98AAAD//3SNQhwAAAAGSURBVAMApD1r3FG0v2wAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">呜哩AI</span>
+                    </a>
+                    <a href="https://txc.dodobid.qzz.io/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <div class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs text-gray-400"><i class="fas fa-bolt"></i></div>
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">优选订阅生成器</span>
+                    </a>
+                    <a href="http://192.168.0.110/cgi-bin/luci/admin/quickstart/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACH0lEQVR4nExTTU8TQRh+Zna6ERqhRA9Gq21VhBIOJp5s0osGDt48eFbCVcPBP+A/8Bf0N3jw4EeCCTFqTDgpsVLLRytWghgpUtLCzgzzzm6HbWE3M7vzvO/zfo949LQxrqBLjCHPzMbBAGZ2829fRmeE5+6il7My52xWWDJQiGDSRMQJt9PIzEoLWqMkrGewHqXRrI+p4gBy6QQpYn0jwLtPHazUVH9EeRG3Smu6mMSDe0mETsJnZNjHzQkfL962Mf/xoMcZ5zHyWM535EBqLC0fYqlyCCltZrg/fQY3ssKlQqAICwYLTBUHHfl5aQ+rP6XFr2UE5maSEB5wp+Bjpd6JUjERxK3lLgsb8rcfgSOTnP7L1cDKMpe8WEE5REjuFiXM2VT3RAsJc42J1yB+WN+QVmliVBhPwpEzFz3kr3tWVv+teg3E+0ytIk8JE9fczKD90nrycMB+SbbwWbr8T0RQWZV4Od+2ipt/FKRipgMMm9vaYq8WAlRr2pHpEf0T9ub9AeoNheEh7rAPiwFet4DK2jG5K3ODNDmWgDBpf/kusbxm8oR2kS1+VT1hn0sx/Gt2DUSW0hc8KOPg7m0P+20gm+bY+W9C5LDnq1e4GWWNxhZwa5KbqURkwNwquhi7LY2Ex5AaYtje0dj6C+wZLFCAMrXoVDWaxmDtF8P5EUQ1YGX2+NnuON0quhgEps5yNFuwQ8JjBUZf/4nsScweAQAA//9xzWMiAAAABklEQVQDABkRtdngKoqxAAAAAElFTkSuQmCC" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">iStoreOS</span>
+                    </a>
+                    <a href="http://107.174.142.48:8080/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADdElEQVR4nERTTUxcVRQ+5747b/5nCANjQSDQMtofqEJpSpuQpk0aibuS2m5cmJgY27j0Zzs7o9GVidqlLumqSTca05ImqNVBWqASytASwJmKDLw3b2bem3n33uN9JLR3cXNzz/nOz3fOx+HgECEgEtF2olDqfE+iOrJVEeNAAN3t/PcQsuJY6PEPmB2qHfgGMAyuPBHLI6q5kj+5ZhlfPK3AyXqLoOo0QCmCaNiEGFdwuIM/Ot6lPh3rjvz8zvS0cevqVYl5ymtwXt0reh8t75rfLJc9aNQbQmcBjWakFPhCqZYvwYyE+YlXI3Cqn9+4lIt/p8vF/QqW9+j83RV5r/DMUWEUGkMGkQJbx7mYi0EkBHD7L1tXQdJ2FZ49lsHLp9ouHM/ifU70X/LHOff7xyWd0W9Ck4gLKUFJItf1MW5GgSOQVfOQRQ1OQsjCE4uluH+TKqtnjMvXv3z3zw35/mbZUj2ZEBs7ksB0nFNHkmOrJaEtjHA4G8aedpMmh1NouwKfbOypkBnOdvT1rrJaUwxbLlDYAHU6l6SFdYcW12x8cyABmSQHX/fe1x6CmcVdvF3YoWvjnZSOGWrHEdRoiCFWsvyRyp4D2bTB9myPPS05+HynASubNd2GAs4IHhQdKJbrMF+0cdvy8LVDEVb+twrrz6sjPJiT0FmkCIaK1PQENps+KE1iEMDX/yEG4Ok/MgBMTYjXFCA1T3oKxA61mfOpWJjWy46KRziN5tI00BWD1/uS+46aM5g4lobR/jhcOfsKJSIGzRctlUlFqbcz/pAnTLYUMQRz6h7dmd3C0VwbchalZ//UMMj2cM0Gp96C0YEEpaIcP59eBdtx2WCPYqmkuYh6FKlvH6Vnf5q3h5puTfqCmGV7OHWxn1yvhXfubwA3GAkpUPhEeiekwcP8yvmuhU8mxATDTK761ljnh2/0J2W1rtBkJKP6qjVaYNdaxBlQLIQQDzFdAUrHFezcyaycmui/HmB5Pp9ngymc/WW5ekP42Zu//V1hrVZDzvyxRZolhppMpyGU8AVGYgn+9rlumBzv+GAwg78G2P1VPhDGUtm9cHfB+WpuZXd0t+aDZdcClUIqGYd03ICxo5m5S6fbPh7ujM68EBO81LN+azlvTycK/tQ1qypOrG5WzgSWXG/mQSbFl0acr2/h0c+cA9/A9j8AAAD//wsDcg0AAAAGSURBVAMARyTiypgcXxYAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">qbittorrent</span>
+                    </a>
+                    <a href="http://107.174.142.48:5244/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACtUlEQVR4nHRTXUgUURQ+9840O7N/5Zrl+sdaglQLFfhgD6tE9hIJIlYQBVmvaiwkhL1MPUREhYlab1FQkfUWVC/aQ1I9FD2EgUiKmpJ/bfszszOzO3O6M+26udWBYe49555zv/t951AoNkQiI9Jit+NjsWI/KT4kE2LZ64GpKRepcJVSwnEr07ElORw2is/YxheSZSfQ/+Nrjcsr9aGJHYIolRJ2x/Y6WL1jLN5P6er1XkKWkSFhhgUENjTmGEhPRyTB/1ii/sqYtvIFEEYpxSxFEvGIgQbdVOdS6Vhn1Fc3ls8h+cUtbXaHl3e/p8BtVjXlbLe3+hGrjnmEg8r8EdHleYpgaVom1dAthWbsXEbWZQeFC+mVEm5rWVKLn+nxVj8kL7FNGMP2EUTuGPu6PNUvFDVxSuJ8AQL8RefZLHcdwaDyrc+isLdHqjohvNbDhih8BgXG4RA02fE8eUPa/CdC6E5F4IK9pFzhIUdGl6fqao5NapgwANSB32fHWz88d7Nk1YlbMC5K3n2gp6rYbrKg9whyzr/RPAfb4CAk4C60kDc3knNN7fubJ4aUhVZW0mafs6nJgOVImSvAnnGcmPAKg+DhrsEaLIAYvxRFlCSeGyaUhrJmZo1phhZgc1pP/fS7svOFApiTkoN+8EOAsyAKkS2xGnX2QplYsSeRXr153h96ezs9ezoglu9mffCsk9RqsizTQifeQxEqYZHdMgaHSUe/tlDv490fDVObpAJGMoZ1VKTuBxYx43pKaezesi5jzjqJxvDsgiCcZIzzPOLwJk70WFY2aWrWaEAIPkFiLSuG0pZPtgneODQtZAnChPX8BGXalKhmIsPe3wyU1Mf174NJY+1A1B16Z7c9bGjldbOn7XdAxhmxEny1BmNsRapYYjL+c5j+Gs//mZMIjpD4p/8XAAAA///NRrTPAAAABklEQVQDANIVQsfnnQFzAAAAAElFTkSuQmCC" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">openlist</span>
+                    </a>
+                    <a href="https://skills.sh/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABYElEQVR4nKyTPUvDUBSGT1JBijjYtZQIOnWxLaXEwa0QgpuDqOAH+RGZxdk/oYI4iUsmXYIBpYGA4OigaCCTi2imBN+TJphcrl/QA09Czj3ve08u99RIHotgFRyC7Tz3AV7FQkX4ngf7YA3MCmtv4Dxff5QZ6OAMaPRzPIENcFs2YNE1aNHf4hmssJmaJw5k4m63S8PhUGbQyjVZBwvgDsyUKxRFIcdxSNM06vf7FMexaPIOlriDgSjmME2TDMOgdrtNlmXJumDNgDu4BJU+6/U6eZ5HvV4v+w7DMOsiiiLR5EqVWfOOhZij2WySbduy0uwMNsFpkeB/DoKAGo1GpTBNU9J1nXzfL6e3pvAY0fhAsnPodDrkui4lSVIxUFU166pkwJpRcQ+OwA79L47B7sQuEl/P9fz9W1Rqa6WFF3AB5mh8uaYFIQ8Tz8oeuC+Syje78Dgv09con4Ab8CAWfgIAAP//5WrNRgAAAAZJREFUAwCSMlGPWGOBGwAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">Skills Directory</span>
+                    </a>
+                    <a href="https://xn--wtq35pfyd55o.com/#/dashboard" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <div class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs text-gray-400"><i class="fas fa-plane"></i></div>
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">便宜机场</span>
+                    </a>
+                    <a href="https://1.flug.de5.net/thy" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <div class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs text-gray-400"><i class="fas fa-sync"></i></div>
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">订阅转换</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Category: Social & Others -->
+            <div class="bg-gray-800/50 p-5 rounded-xl border border-gray-700/50">
+                <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i class="fas fa-user-friends text-purple-400"></i> 社交 & 其他
+                </h3>
+                <div class="grid grid-cols-1 gap-2">
+                    <a href="https://x.com/home" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAB00lEQVR4nIRSP+tBURh27zVI/sRmlZLVB2Aw2MQHsLAIgywMFsUgBkKSEiWKAbGKmBSSTTaFhBQpgz+/R6eui+F3h3Pued/neZ/3fc5heP99FEVxjwzZZDKZUCjEerlcns8nF42jWCzGz/1+R4QmBWKxWLfbJSuYNE2/cjQNtFarbbfbcrn8Q2EymRgMBqvVqlarTSZTq9Xi8/koqVKpCoWCy+VaLBZvAkROpxPDMEg4nc5AILBer+fzuVQqrVQqiUSi0+kQtReY8HB+PB6lUqnZbI5Go1qtZrFYMpkMpLLZLGqRAV5IsgENHY/H4/V6r9drMplEk71eD2jUYtFvAmlsv9+Hw+FUKlUsFqfT6XK55P26zD1g0NvtBk/6/X4+n0frRqNxu91yjX4rQBpovV4P12EXJoZaPB4Hmrj8QUA/GEOj0UQiEZvNZrfb4Wa1WkUJh8OBFMthWKpIJKrX66FQaDgcrlYrpVKJftxudzqdHgwGu92OXDFFygsEgkajUS6XMS5MRBuYB5P4fD6I+P1+s9kMHcQZ8lqCweDhcIhGo+RCEARuPB7ncjmFQqHT6TabzWw2Q5ZiH9/xeCRkrm8wQCKRnM9nxLF+2/pt+Q8f3x8AAAD//+aCMSEAAAAGSURBVAMAIEX7cbBL8qcAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">X (Twitter)</span>
+                    </a>
+                    <a href="https://www.instagram.com/reels/DRjxaUDkrc-/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADNUlEQVR4nBRTS2xUVRj+vnPPvTNzZ+a2Tgs0lUeLqZCAUdxYFioaMcTowpVajdHogsRI4qLuFBNNlLDysXBh1Fg1xIgmunBhQjAuSkKMvAIUykAolEJpO7TzuNN77vn5ucnJPYv/nO95LPR7d8C9EcKMG8HWaNWxnKaouhYT10WP5KjqTAxKkR4FOqn61XMZFj59AE/9xPcH3ZsRg28jAaJF7/t8yv5CizXfRuK7iHM9JEToAZM73WUSUQxl2WdojPGz+/2lkuFwuOTzLbtzu30fUamJBNYzCKC4Cp8LmEP8XMb8wAz8kVkXwtkOls7ZzUaG9TJs3OODx34I0PqyITLZoM06MCtdQDFRCvXvaUcrEvyxhXy+Ebij0xKZ9ghPrU991kz54F8xcGxZ2u/VWcMdGF1ISoquNFor4N7tkHUWtF6ws0w88ytyprCD+W24JEXUs17c8eusxVcRrMkgB0fB3YOAzvPwLOToHOgy4FpKPvewCFZopCmmyvOshmdhbJeFoA4jJ4HPHwK3FSDPTkCe/gXyeA8wquubf8CoBTGe4LKas0xjo38RlSZhAtWMKWDrPLBrE+Sd7yD1Kcj0NOTt3yGvb4bEhHRUmlVW1IvQhUXlf5iqWh2sQio3gN4ZRVDj+paA2hzQVh/KZTDL4e1tzbpXWXr1tqsXeN0nV8FkBkQKrm2paafA/5TqgX3gzhr4ZD/41WvAkeNguw7e5yC5ZipOJYSw7J0VqeY07IqvNSkbV4DD+8GxD8AvPtIiKJvJScjX30MGU6DYhLon2ibFjMVKbREsOvjuPM2OHeIvHyLKp4FDr0BKQ0AzAq+oYYHKsC2YJ94SWWhQRBlHQ8qgzwuLyubEx5AX/6QpaWXmj+lACWypN2kIebSshgcwm0ZF9rxA2btf47MacSz0H+IC12JECnAyssty2zhYGNCc7zmpJdLEkHntgMpeWCAmJsT/PZUHq49YaWw4Q3cQY2YdfmQ/KVR7lTFC1acVFqeHOwZsWMjNIlhX7TcTmM4w5daQY2PDS8aO42d9Nq+igJNIFDHRQ7EOxooa52BFW5l0NN6mYMAAa2yOKD3hw8WXefGT3+4CAAD//3mbWbsAAAAGSURBVAMAcjeEKDwqBdkAAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">Instagram</span>
+                    </a>
+                    <a href="https://www.zhihu.com/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACp0lEQVR4nDSTT0hUURTGf+fNc7K0/5YFFkRFEbVKWim0KNoYLSQIgiAqhRa1yV2YFC2CXGRYRFgUGRVtLdq0KJFatElSChLJMqTyXzqjzsy7ffc+m+HNm3vuOd/5vu+eG9PmsiRcJssZjFWZMihFgH8yisThnT4RjjLFMvzV7x2+cDEmz1UquUBRmyoqzSlxGc58ouFcETPCx+kxK+ASx3J9W9hOYrS4GXVZGtAzZBr34F4OQS6v9Kxi2QD0nxHKdYHVkhCbiSlRERlJkiM6XIvrOAQNTyBZHZLt6zRsWgXl2VRCSXCj8/B7PgAtj0U98dS8hKO7sFhdeo5JioLfJqB7ENrqYEyMZiVn52rsRj/uUq/wVwjTFEy0ubkaq98CjQ9hYAyuvYWDnTA0Dr/yWF031N+DV8O4NV5WQX6oSyST8BwWZN6+dujt0zIRzUn58BOmcqmBee0XZmG+JGOd6KtOtS4O3gogp4RT9bB+P2yrwjXXYnv1Fg75ApQpb0GFkcDNixaAGFhsMsYtYDXSs3udjJbDa5bC90mSSplYSAIjn4ynHRq68N+DuMj5hYZnYEQMbqrzI9EWmwfvsfNduJ4BqNB+cSEtKCUp4yBBDPzpB9SybDg2Wg7ARA7X2Qinj2BFdSpXPCmEPlYRLzLwEorhpDV1Oltv0MYNWGsDnLiPDf+B583Yyce4lRqaD+ekIsH5mbjelxrrBBob4UioWQvPzsKLfnj6Trsa2Y7XMPgDdlyBruO49jfwcRTmojCliF1k1uSmXEJltSZvaxXW9zncCfMXQBrD/zDCbnGclwSpiQfQzlykpNuUE42Nq/hTuA9h9n1+mHlLTZNbRKl+p3Xk7418uBUzTWtYxjQpodIfWXrvwjvcSBWYWAbNoUHEBDnuMkLrPwAAAP//k/vtXAAAAAZJREFUAwAZCxUJ2U/CKgAAAABJRU5ErkJggg==" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">知乎</span>
+                    </a>
+                    <a href="https://docs.google.com/document/d/1UKDGDjoe7CXkPnE3XJpwiFNuTX_4uLAsKj0YGF2Tk94/edit?tab=t.0" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAd0lEQVR4nOyQsQ2AMAwE3+COhhGYhQzCDLRU0KRmIWYhI6QA0SAZ0iCaIJIUNJxkyS7+/XpWemtE9hGgEmEYorynWi8zBBXisJwgdpR8v6aueKVSer12RiLsc44ySE7wd/DcgS/d9x1k51jEY5xBC4JBMOIeDwcAAAD//7RP03wAAAAGSURBVAMABnog/gXuIo0AAAAASUVORK5CYII=" class="icon-img">
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">YouTube Automation Doc</span>
+                    </a>
+                    <a href="https://my-nav-4cv.pages.dev/" target="_blank" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 border border-transparent hover:border-gray-600 transition-all group">
+                        <div class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs text-gray-400"><i class="fas fa-compass"></i></div>
+                        <span class="text-sm text-gray-300 group-hover:text-white truncate">旧导航站</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="fixed bottom-4 w-full text-center text-gray-600 text-xs">
+        System Status: <span class="text-green-500">Online</span> • Agent: <span class="text-blue-400">OpenClaw</span>
+    </div>
+
+    <script>
+        // Clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Search Handler
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = e.target.value;
+                if (query) {
+                    if (query.includes('.') && !query.includes(' ')) {
+                        window.location.href = query.startsWith('http') ? query : 'https://' + query;
+                    } else {
+                        window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
